@@ -62,7 +62,8 @@ class Database:
         self.db_path.parent.mkdir(parents=True, exist_ok=True)
         self.connection = sqlite3.connect(
             self.db_path,
-            detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES
+            detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES,
+            check_same_thread=False  # Required for Streamlit's threading model
         )
         self.connection.row_factory = sqlite3.Row
         init_schema(self.connection)
