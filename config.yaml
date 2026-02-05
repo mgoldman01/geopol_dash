@@ -1,0 +1,192 @@
+# Geopolitical Intelligence Platform Configuration
+# Copy to config.local.yaml and edit for your environment
+
+# =============================================================================
+# Data Sources
+# =============================================================================
+data_sources:
+  # Enable/disable data sources
+  enabled:
+    - gdelt      # GDELT 2.0 - always available, no API key needed
+    # - acled    # Uncomment when ACLED API key is configured
+    # - sipri    # Uncomment when SIPRI data files are imported
+    # - news     # Uncomment when Anthropic API key is configured
+
+  # GDELT configuration
+  gdelt:
+    # No API key required
+    timeout_seconds: 30
+    max_events_per_day: 10000  # Limit to prevent overwhelming queries
+
+  # ACLED configuration (requires registration)
+  acled:
+    api_key: ${ACLED_API_KEY}  # Set via environment variable
+    api_url: "https://api.acleddata.com/acled/read"
+
+  # SIPRI configuration (manual data import)
+  sipri:
+    data_directory: "data/sipri"
+
+  # News scraper configuration
+  news:
+    anthropic_api_key: ${ANTHROPIC_API_KEY}
+    rss_feeds:
+      - "https://feeds.reuters.com/Reuters/worldNews"
+      - "https://feeds.bbci.co.uk/news/world/rss.xml"
+    fetch_interval_minutes: 60
+
+# =============================================================================
+# Region Definitions
+# =============================================================================
+# Maps region names to ISO 3166-1 alpha-3 country codes
+regions:
+  middle_east:
+    name: "Middle East"
+    countries:
+      - SYR  # Syria
+      - IRQ  # Iraq
+      - IRN  # Iran
+      - SAU  # Saudi Arabia
+      - ARE  # United Arab Emirates
+      - YEM  # Yemen
+      - OMN  # Oman
+      - KWT  # Kuwait
+      - QAT  # Qatar
+      - BHR  # Bahrain
+      - JOR  # Jordan
+      - LBN  # Lebanon
+      - ISR  # Israel
+      - PSE  # Palestine
+      - EGY  # Egypt
+      - TUR  # Turkey
+
+  horn_of_africa:
+    name: "Horn of Africa"
+    countries:
+      - ETH  # Ethiopia
+      - ERI  # Eritrea
+      - SOM  # Somalia
+      - DJI  # Djibouti
+      - SDN  # Sudan
+      - SSD  # South Sudan
+      - KEN  # Kenya (partial)
+      - UGA  # Uganda (partial)
+
+  sahel:
+    name: "Sahel"
+    countries:
+      - MLI  # Mali
+      - NER  # Niger
+      - BFA  # Burkina Faso
+      - TCD  # Chad
+      - MRT  # Mauritania
+      - SEN  # Senegal (partial)
+      - NGA  # Nigeria (partial)
+
+  eastern_europe:
+    name: "Eastern Europe"
+    countries:
+      - UKR  # Ukraine
+      - RUS  # Russia
+      - BLR  # Belarus
+      - MDA  # Moldova
+      - POL  # Poland
+      - ROU  # Romania
+      - HUN  # Hungary
+      - SVK  # Slovakia
+
+  east_asia:
+    name: "East Asia"
+    countries:
+      - CHN  # China
+      - TWN  # Taiwan
+      - JPN  # Japan
+      - KOR  # South Korea
+      - PRK  # North Korea
+      - MNG  # Mongolia
+
+  south_china_sea:
+    name: "South China Sea"
+    countries:
+      - CHN  # China
+      - TWN  # Taiwan
+      - VNM  # Vietnam
+      - PHL  # Philippines
+      - MYS  # Malaysia
+      - BRN  # Brunei
+      - IDN  # Indonesia
+
+# =============================================================================
+# Analysis Parameters
+# =============================================================================
+analysis:
+  # Moving average window for smoothing event counts
+  moving_average_window_days: 30
+
+  # Baseline period for calculating deviations
+  baseline_period_days: 90
+
+  # Threshold for anomaly detection (standard deviations)
+  anomaly_threshold_std: 2.0
+
+  # Minimum events required for trend detection
+  min_events_for_trend: 5
+
+  # Goldstein score aggregation
+  goldstein:
+    # Weight events by number of mentions/sources
+    weight_by_mentions: true
+    # Exclude events below this mention count
+    min_mentions: 2
+
+  # Temporal clustering parameters
+  temporal_clustering:
+    # Max days between events to be considered a cluster
+    max_gap_days: 3
+    # Min events to form a cluster
+    min_cluster_size: 3
+
+# =============================================================================
+# API Keys
+# =============================================================================
+# IMPORTANT: Never commit actual API keys to version control!
+# Use environment variables or config.local.yaml (which is gitignored)
+api_keys:
+  anthropic: ${ANTHROPIC_API_KEY}
+  # acled: ${ACLED_API_KEY}
+
+# =============================================================================
+# Database
+# =============================================================================
+database:
+  path: "data/geopol.db"
+  # Enable WAL mode for better concurrent read performance
+  wal_mode: true
+
+# =============================================================================
+# Dashboard Settings
+# =============================================================================
+dashboard:
+  # Default date range for event browser (days back from today)
+  default_date_range_days: 30
+
+  # Maximum events to display in table
+  max_display_events: 500
+
+  # Refresh interval for source status (seconds)
+  status_refresh_seconds: 60
+
+  # Default region selection
+  default_region: "middle_east"
+
+# =============================================================================
+# Logging
+# =============================================================================
+logging:
+  level: INFO  # DEBUG, INFO, WARNING, ERROR
+  # Log to file in addition to console
+  file: "logs/geopol.log"
+  # Rotate logs when they exceed this size (MB)
+  max_file_size_mb: 10
+  # Keep this many backup log files
+  backup_count: 5

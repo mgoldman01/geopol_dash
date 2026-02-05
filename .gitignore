@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
@@ -7,6 +8,13 @@ __pycache__/
 *.so
 
 # Distribution / packaging
+=======
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+>>>>>>> e0ec9a9 (phase 1 CC write)
 .Python
 build/
 develop-eggs/
@@ -205,3 +213,33 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+venv/
+env/
+.env
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Project specific
+data/*.db
+data/*.sqlite
+data/cache/
+*.log
+
+# Secrets (never commit)
+config.local.yaml
+.env.local
+secrets/
+
+# OS
+.DS_Store
+Thumbs.db
